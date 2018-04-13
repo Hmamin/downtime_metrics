@@ -89,14 +89,8 @@ fleet_metrics = field_metrics.worksheet('Fleet Metrics')
 total_site_time = fleet_metrics.cell(5,28).value
 total_tower_time = fleet_metrics.cell(5,29).value
 
-# Convert duration columns to timedelta
-time_delta_cols = ['Total Time', 'time past SLA', 'Downtime of ticket']
-# for col in time_delta_cols:
-#     df[col] = pd.to_timedelta(df[col])
-print(df.dtypes)
-print(df.shape)
-
 # Filter df to include only hardware-related issues
+time_delta_cols = ['Total Time', 'time past SLA', 'Downtime of ticket']
 hw_issues = ['battery', 'cbox', 'connectivity', 'enclosure',\
              'inverter', 'site controller', 'HW firmware', 'alg software']
 four_non_issues = ['166', '259', '260', '754']
@@ -488,63 +482,6 @@ def update_boxplot(gen_num, site_tower_val, outlier_val):
                     layout=layout1)
             )
     return g, str(df.shape)
-
-
-#==============================================================================
-# @app.callback(
-#         Output('site_table', 'children'),
-#         [Input('outlier', 'value'),
-#         Input('site_or_tower', 'value'),
-#         Input('gen_type', 'value')])
-# def table(outlier_val, site_tower_val, gen_num):
-#     df = filter_df(hw_df, gen_num, site_tower_val, outlier_val)
-#     return df
-#==============================================================================
-
-
-#==============================================================================
-# @app.callback(
-#         Output('output_violin', 'children'),
-#         [Input('gen_type', 'value'),
-#         Input('outlier', 'value')])
-# def graph_violin(gen_val, outlier_val):
-#     '''
-#     Create violin plot for each gen type.
-#     '''
-#     df = filter_df(hw_df, gen_val, outlier=False)
-#     traces = []
-#     for gen in df['Model Type'].unique():
-#         traces.append(gen)
-# #==============================================================================
-# #         current_trace = {'x': gen,
-# #                          'y': hw_df.loc[hw_df['Model Type']==gen,'Total Time'],
-# #                          'name': gen,
-# #                          'type': 'violin',
-# #                          'box': {'visible': True},
-# #                          'meanline': {'visible': True}
-# #                          }
-# #         traces.append(current_trace)
-# #==============================================================================
-# #==============================================================================
-# #     trace0 = {'x': traces[0],
-# #               'y': df.loc[df['Model Type']==traces[0], 'Total Time']}
-# #==============================================================================
-#     layout0 = go.Layout(title='violin gen test')
-#     fig = ff.create_violin(df, data_header='Total Time',
-#                            #group_header='Model Type',
-#                            width=600, colors='rgb(244, 244, 203)')
-#     g = dcc.Graph(
-#             id='violin_output',
-#             figure=fig
-# #==============================================================================
-# #             figure=go.Figure(
-# #                     data=[trace0],
-# #                     layout=layout0
-# #                     )
-# #==============================================================================
-#             )
-#     return g
-#==============================================================================
 
 
 if __name__ == '__main__':
