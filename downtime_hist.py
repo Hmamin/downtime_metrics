@@ -131,6 +131,7 @@ app.css.append_css({'external_url': external_css})
 # Create app
 app.layout = html.Div([
         html.H1('Hardware Tickets'),
+               
         # Row containing outlier cutoff and operating time
         html.Div([
             html.Div([
@@ -143,6 +144,7 @@ app.layout = html.Div([
             ),
             html.Div(id='operating_time')],
         style={'display': 'flex', 'flex-wrap': 'wrap'}),
+
         # Row containing dropdowns for downtime type and model type
         html.Div([
             html.Div([
@@ -201,9 +203,7 @@ app.layout = html.Div([
         html.Div(id='site_graph', style={'margin-bottom': '20px'}),
         dcc.Dropdown(id='site_dropdown', options=dropdown_labels, multi=False,
            value=dropdown_labels[0]['label']),
-        html.Div(id='footer', style={'width': '100%', 'height': '100px'}),
-        html.Div(id='hidden_json', style={'display': 'none'}),
-        html.Div(id='output_violin')
+        html.Div(id='footer', style={'width': '100%', 'height': '100px'})
     ],
     style={'width': '100%', 'max-width': '950px', 'min-width': '500px'}, 
 id='main_div')
@@ -227,43 +227,6 @@ def update_operating_time(site_tower_val):
             style={'width': '100S%'})
     return output_txt
 
-
-#==============================================================================
-# @app.callback(
-#         Output('hidden_json', 'children'),
-#         [Input('outlier', 'value'),
-#          Input('gen_type', 'value'),
-#          Input('site_or_tower', 'value')
-#          ])
-# def filter_to_json(outlier_val, gen_val, site_tower_val):
-#     '''
-#     Filter dataframe so all graphs in current session reflect user selections.
-#     '''
-#     # Filter outliers
-#     try:
-#         outlier = float(outlier_val)
-#     except Exception as e:
-#         print(e)
-#         outlier = float(800)
-#     filtered_df = hw_df.loc[hw_df['Total Time'] < outlier, :]
-#     
-#     # Filter df to selected generation.
-#     if gen_val == 'gen3':
-#         filtered_df = filtered_df.loc[filtered_df['Model Type'].isin(gen3_names), :]
-#     elif (gen_val == 'gen2') | (gen_val == 'gen1'):
-#         filtered_df = filtered_df.loc[filtered_df['Model Type'] == gen_val, :]   
-# 
-#     # Filter df to selected ticket type (sitewide or single tower).
-#     site_condition = (filtered_df['Symptom (red text=guess)']\
-#         .isin(site_symptoms)) | (filtered_df['DPG #'].isin(site_dpg))
-#     if site_tower_val == 'site':
-#         filtered_df = filtered_df.loc[site_condition, :]
-#     elif site_tower_val == 'tower':
-#         filtered_df = filtered_df.loc[~site_condition, :]
-#         
-#     return filtered_df.to_json(orient='split', date_format='iso')
-# 
-#==============================================================================
 
 @app.callback(
     Output('output_hist', 'children'),
@@ -413,6 +376,7 @@ def graph_scatter(outlier_val, gen_num, site_tower_val):
             )
     return g
  
+    
 @app.callback(
         Output('site_graph', 'children'),
         [Input('site_dropdown', 'value')]
@@ -486,4 +450,3 @@ def update_boxplot(gen_num, site_tower_val, outlier_val):
 
 if __name__ == '__main__':
     app.run_server(debug=True, port=8000)
-    #app.run_server(threaded=True, port=8001)
