@@ -30,8 +30,8 @@ def auth_gdrive():
 
 
 def get_auth(file):
-    '''Read comma separated username and password from file. Return as list of
-    lists (in case multiple users).
+    '''Read comma separated username and password from file. Return as list 
+    of lists (in case multiple users).
     '''
     with open(file, 'r') as f:
         txt_auth = f.read().split(',')
@@ -50,7 +50,7 @@ def time_from_percentile(p, timeseries):
 
 def filter_df(df, gen_val=None, site_or_tower=None, outlier=False):
     '''Filter dataframe based on user-selected parameters on page.'''
-    # Filter df based on user-selected options - alternative to storing as JSON.
+    # Filter df on user-selected options - alternative to storing as JSON.
     if outlier is not False:
         try:
             outlier = float(outlier)
@@ -81,8 +81,9 @@ def filter_df(df, gen_val=None, site_or_tower=None, outlier=False):
 client = auth_gdrive()
 field_metrics = client.open('Field Services Metrics & Uptime')
 tickets = field_metrics.worksheet('LIVE Tickets')
-df = get_as_dataframe(tickets, skiprows=2, usecols=list(range(21)), parse_dates=[3, 4, 5], evaluate_formulas=True,
-                     na_values=['#DIV/0!', '#VALUE!'])
+df = get_as_dataframe(tickets, skiprows=2, usecols=list(range(21)),
+                      parse_dates=[3, 4, 5], evaluate_formulas=True,
+                      na_values=['#DIV/0!', '#VALUE!'])
 
 # Get total operating time from fleet metrics sheet.
 fleet_metrics = field_metrics.worksheet('Fleet Metrics')
@@ -128,7 +129,7 @@ auth = dash_auth.BasicAuth(app, txt_auth)
 external_css = 'https://codepen.io/hmamin_gcn/pen/YeOKvd.css'
 app.css.append_css({'external_url': external_css})
 
-# Create app
+# Create app layout
 app.layout = html.Div([
         html.H1('Hardware Tickets'),
                
@@ -195,7 +196,8 @@ app.layout = html.Div([
                     style={'width': '30%', 'margin': '0px 45px 0px 75px',
                            'box-sizing': 'border-box'}),
             html.Div([
-                    html.H6('Corresponding Time', style={'margin-bottom': '10px'}),
+                    html.H6('Corresponding Time', 
+                            style={'margin-bottom': '10px'}),
                     html.Div(id='output_time')],
                     style={'width': '45%'})],
             style={'display': 'flex', 'flex-wrap': 'wrap'}),
@@ -214,6 +216,7 @@ id='main_div')
         [Input('site_or_tower', 'value')]
         )
 def update_operating_time(site_tower_val):    
+    '''Update displayed operating time based on user-selected values.'''
     if site_tower_val == 'all' or site_tower_val == 'tower':
         time = total_tower_time
         time_type = 'Tower'
@@ -235,7 +238,9 @@ def update_operating_time(site_tower_val):
     Input('gen_type', 'value'),
     Input('site_or_tower', 'value')])
 def update_hist(outlier_val, bin_size_val, gen_num, site_tower_val):
-    df = filter_df(hw_df, gen_val=gen_num, site_or_tower=site_tower_val, outlier=outlier_val)
+    '''Filter df from user selections and update histogram.'''
+    df = filter_df(hw_df, gen_val=gen_num, site_or_tower=site_tower_val, 
+                   outlier=outlier_val)
     bin_width = int(bin_size_val)
         
     # Create trace and layout, then pass to figure in graph object
@@ -273,7 +278,8 @@ def update_hist(outlier_val, bin_size_val, gen_num, site_tower_val):
         )
 def update_distplot(bin_size_val, outlier_val, gen_num, site_tower_val):
     bin_width = int(bin_size_val)
-    df = filter_df(hw_df, gen_val=gen_num, site_or_tower=site_tower_val, outlier=outlier_val)
+    df = filter_df(hw_df, gen_val=gen_num, site_or_tower=site_tower_val, 
+                   outlier=outlier_val)
     times = df['Total Time'].tolist()
     
     # Create figure, edit layout, then pass to graph
@@ -297,6 +303,7 @@ def update_distplot(bin_size_val, outlier_val, gen_num, site_tower_val):
         [Input('percentile_choice', 'value')]
         )
 def graph_percentile(percentile_val):
+    '''Update graph showing percentile of user-entered downtime value.'''
     try:
         p = int(percentile_val)
     except Exception as e:
@@ -304,9 +311,9 @@ def graph_percentile(percentile_val):
         p = 1
     p_time, sorted_time, rows = time_from_percentile(p, hw_df['Total Time'])
     y = [100*i/rows_98 for i in range(1, rows_98+1)]
-    trace1 = go.Scatter(x=sorted_time.loc[sorted_time<=p_time_98], y=y, mode='lines',
-                        line=go.Line(color='rgb(232, 161, 20)', shape='spline'),
-                        fill='tozeroy')
+    trace1 = go.Scatter(x=sorted_time.loc[sorted_time<=p_time_98], y=y, 
+                        mode='lines', line=go.Line(color='rgb(232, 161, 20)', 
+                        shape='spline'), fill='tozeroy')
     trace2 = go.Bar(x=[p_time], y=[p], width=[2,500])
     layout1 = go.Layout(title='Downtime Density', height=500,
                        xaxis={'title': 'Downtime', 'dtick': 40, 
@@ -347,13 +354,16 @@ def update_time(p_val):
     Input('site_or_tower', 'value')]
     )
 def graph_scatter(outlier_val, gen_num, site_tower_val):
-    '''Create scatter plot of ticket downtimes after removing outliers based on input value.'''
+    '''Create scatter plot of ticket downtimes after removing
+    outliers based on input value.
+    '''
     try:
         outlier_val = float(outlier_val)
     except Exception as e:
         print(e)
         outlier_val = float(560)
-    df = filter_df(hw_df, gen_val=gen_num, site_or_tower=site_tower_val, outlier=outlier_val)
+    df = filter_df(hw_df, gen_val=gen_num, site_or_tower=site_tower_val, 
+                   outlier=outlier_val)
     
     # Create trace and layout, then pass to graph figure.
     trace1 = go.Scatter(
@@ -416,9 +426,7 @@ def graph_single_site(site):
         Input('outlier', 'value')
         ])
 def update_boxplot(gen_num, site_tower_val, outlier_val):
-    '''
-    Testing - load json from hidden div into df and plot.
-    '''
+    '''Filter df to update boxplots.'''
     df = filter_df(hw_df, gen_val=gen_num, site_or_tower=site_tower_val)
     traces = []
     if gen_num == 'all' or gen_num == 'gen3':
