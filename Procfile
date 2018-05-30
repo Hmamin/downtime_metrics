@@ -1,1 +1,1 @@
-web: gunicorn downtime_hist.py
+web: gunicorn downtime_hist:server
