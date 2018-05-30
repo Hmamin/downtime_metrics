@@ -24,8 +24,9 @@ import json
 def auth_gdrive():
     '''Read in environment variables to authorize access to Google drive.'''
     scope = ['https://spreadsheets.google.com/feeds']
-    json_file = os.environ['json_file']
-    creds = ServiceAccountCredentials.from_json_keyfile_name(json_file, scope)
+    email = os.environ['google_client_email']
+    key = os.environ['google_private_key']
+    creds = ServiceAccountCredentials(email, key, scope)
     client = gs.authorize(creds)    
     return client
 
