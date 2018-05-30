@@ -5,6 +5,7 @@ Created on Thu Feb 22 09:09:08 2018
 @author: hmamin
 """
 
+import os
 import dash
 import dash_auth
 import dash_core_components as dcc
@@ -21,21 +22,22 @@ import json
 
 
 def auth_gdrive():
-    '''Authorize access to Google drive to load data.'''
+    '''Read in environment variables to authorize access to Google drive.'''
     scope = ['https://spreadsheets.google.com/feeds']
-    creds = ServiceAccountCredentials.from_json_keyfile_name\
-        ('client_secret.json', scope)
-    client = gs.authorize(creds)
+    google_client_email = os.environ['google_client_email']
+    google_private_key = os.environ['google_private_key']
+    creds = (google_client_email, google_private_key, scope)
+    client = gs.authorize(creds)    
     return client
-
+    
 
 def get_auth(file):
-    '''Read comma separated username and password from file. Return as list 
-    of lists (in case multiple users).
+    '''Read username and password in from environment variables set in
+    Heroku.
     '''
-    with open(file, 'r') as f:
-        txt_auth = f.read().split(',')
-    return [txt_auth]
+    username = os.environ['username']
+    password = os.environ['password']
+    return [username, password]
     
  
 def time_from_percentile(p, timeseries):
