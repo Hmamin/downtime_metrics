@@ -26,7 +26,9 @@ def auth_gdrive():
     scope = ['https://spreadsheets.google.com/feeds']
     google_client_email = os.environ['google_client_email']
     google_private_key = os.environ['google_private_key']
-    creds = (google_client_email, google_private_key, scope)
+    creds = ServiceAccountCredentials.create_scoped(
+            google_client_email, google_private_key, scope
+            )
     client = gs.authorize(creds)    
     return client
     
