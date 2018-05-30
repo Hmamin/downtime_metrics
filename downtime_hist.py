@@ -24,7 +24,7 @@ def auth_gdrive():
     '''Authorize access to Google drive to load data.'''
     scope = ['https://spreadsheets.google.com/feeds']
     creds = ServiceAccountCredentials.from_json_keyfile_name\
-        (r'C:\Users\hmamin\Desktop\PythonHM\client_secret.json', scope)
+        ('client_secret.json', scope)
     client = gs.authorize(creds)
     return client
 
