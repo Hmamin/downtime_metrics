@@ -28,7 +28,7 @@ def auth_gdrive():
     key = os.environ['google_private_key']
     creds = ServiceAccountCredentials(email, key, scope)
     client = gs.authorize(creds)    
-    return client
+    return client, email, key
 
 
 def get_auth():
@@ -82,12 +82,14 @@ def time_from_percentile(p, timeseries):
 # 
 #==============================================================================
 login_info = get_auth()
+creds = auth_gdrive()
 
 app = dash.Dash(__name__)
 server = app.server
 app.layout = html.Div([
         html.H3('test'),
-        html.Div(login_info)
+        html.Div(login_info),
+        html.Div(creds)
 ])
     
 if __name__ == '__main__':
