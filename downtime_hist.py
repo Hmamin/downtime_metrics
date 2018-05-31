@@ -93,6 +93,7 @@ server = app.server
 # App layout
 app.layout = html.Div([
         html.H3('test'),
+        html.H5(txt_auth[0]),
         html.H5(txt_auth[1])
 ])
     
