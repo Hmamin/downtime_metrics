@@ -86,8 +86,8 @@ def time_from_percentile(p, timeseries):
 txt_auth = get_auth()
 #creds = auth_gdrive()
 
-app = dash.Dash('auth')
-auth = dash_auth.BasicAuth(app, txt_auth)
+app = dash.Dash(__name__)
+#auth = dash_auth.BasicAuth(app, txt_auth)
 server = app.server
 
 # App layout
