@@ -83,12 +83,11 @@ def time_from_percentile(p, timeseries):
 #     return df
 # 
 #==============================================================================
-login_info = get_auth()
+txt_auth = get_auth()
 creds = auth_gdrive()
-print(login_info)
-print(creds)
 
-app = dash.Dash(__name__)
+app = dash.Dash('auth')
+auth = dash_auth.BasicAuth(app, txt_auth)
 server = app.server
 app.layout = html.Div([
         html.H3('test')
