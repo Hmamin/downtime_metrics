@@ -25,11 +25,12 @@ def auth_gdrive():
     '''Read in environment variables from Heroku
     to authorize access to Google drive.'''
     scope = ['https://spreadsheets.google.com/feeds']
-    email = os.environ['google_client_email']
-    key = os.environ['google_private_key']
+    creds = ServiceAccountCredentials.from_json(os.environ['json_content'])
+    #email = os.environ['google_client_email']
+    #key = os.environ['google_private_key']
     #creds = ServiceAccountCredentials(email, key, scope)
-    #client = gs.authorize(creds)    
-    return scope, email, key
+    client = gs.authorize(creds)    
+    return client
 
 
 def get_auth():
