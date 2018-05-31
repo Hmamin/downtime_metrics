@@ -121,9 +121,10 @@ dropdown_labels = [{'label': site, 'value': site} for site in\
 file = 'hist_auth.txt'
 txt_auth = get_auth(file)
 
-# Create app login
+# Create app with login
 app = dash.Dash('auth')
 auth = dash_auth.BasicAuth(app, txt_auth)
+server = app.server
 
 # Link to default CSS
 external_css = 'https://codepen.io/hmamin_gcn/pen/YeOKvd.css'
@@ -131,7 +132,7 @@ app.css.append_css({'external_url': external_css})
 
 # Create app layout
 app.layout = html.Div([
-        html.H1('Hardware Tickets'),
+        html.H1('Hardware Metrics'),
                
         # Row containing outlier cutoff and operating time
         html.Div([
@@ -185,6 +186,8 @@ app.layout = html.Div([
         dcc.Slider(id='bin_size', min=1, max=40, value=16, 
            marks={i: str(i) for i in range(2, 41, 2)}),
         html.Div(style={'height': '60px'}),
+                
+        # Start of graphs section
         html.Div(id='output_hist'),
         html.Div(id='output_distplot'),
         html.Div(id='site_boxplot'),
