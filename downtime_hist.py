@@ -88,6 +88,7 @@ app.layout = html.Div([
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+    server = app.server
 #==============================================================================
 # # Authorize google sheets and load live tickets into dataframe
 # client = auth_gdrive()
