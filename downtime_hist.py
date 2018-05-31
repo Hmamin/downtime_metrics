@@ -26,9 +26,9 @@ def auth_gdrive():
     scope = ['https://spreadsheets.google.com/feeds']
     email = os.environ['google_client_email']
     key = os.environ['google_private_key']
-    creds = ServiceAccountCredentials(email, key, scope)
-    client = gs.authorize(creds)    
-    return client, email, key
+    #creds = ServiceAccountCredentials(email, key, scope)
+    #client = gs.authorize(creds)    
+    return scope, email, key
 
 
 def get_auth():
@@ -87,9 +87,11 @@ creds = auth_gdrive()
 app = dash.Dash(__name__)
 server = app.server
 app.layout = html.Div([
-        html.H3('test'),
-        html.Div(login_info),
-        html.Div(creds)
+        html.H3('test')
+#==============================================================================
+#         html.Div(login_info),
+#         html.Div(creds)
+#==============================================================================
 ])
     
 if __name__ == '__main__':
