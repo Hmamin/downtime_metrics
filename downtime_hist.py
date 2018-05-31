@@ -83,7 +83,7 @@ def time_from_percentile(p, timeseries):
 #==============================================================================
 app = dash.Dash()
 app.layout = html.Div([
-        html.h3('test')
+        html.H3('test')
 ])
 
 if __name__ == '__main__':
