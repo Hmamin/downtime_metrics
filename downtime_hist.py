@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 import gspread as gs
 from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2.service_account import Credentials
 from gspread_dataframe import get_as_dataframe
 import json
 
@@ -25,7 +26,10 @@ def auth_gdrive():
     '''Read in environment variables from Heroku
     to authorize access to Google drive.'''
     scope = ['https://spreadsheets.google.com/feeds']
-    creds = ServiceAccountCredentials.from_json(os.environ['json_content'])
+    creds = Credentials.from_service_account_file(os.environ['json_file'])
+    
+    #creds = ServiceAccountCredentials.from_json(os.environ['json_content'])
+    
     #email = os.environ['google_client_email']
     #key = os.environ['google_private_key']
     #creds = ServiceAccountCredentials(email, key, scope)
