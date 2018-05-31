@@ -27,7 +27,8 @@ def auth_gdrive():
     to authorize access to Google drive.'''
     scope = ['https://spreadsheets.google.com/feeds']
     json_contents = json.load(os.environ['json_content'])
-    creds = Credentials.from_service_account_file(json_contents)
+    creds = Credentials.from_service_account_file(cls=json_contents,
+                                                  scopes=scope)
     
     #creds = ServiceAccountCredentials.from_json(os.environ['json_content'])
     
