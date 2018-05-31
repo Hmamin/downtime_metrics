@@ -22,7 +22,8 @@ import json
 
 
 def auth_gdrive():
-    '''Read in environment variables to authorize access to Google drive.'''
+    '''Read in environment variables from Heroku
+    to authorize access to Google drive.'''
     scope = ['https://spreadsheets.google.com/feeds']
     email = os.environ['google_client_email']
     key = os.environ['google_private_key']
@@ -83,15 +84,13 @@ def time_from_percentile(p, timeseries):
 #==============================================================================
 login_info = get_auth()
 creds = auth_gdrive()
+print(login_info)
+print(creds)
 
 app = dash.Dash(__name__)
 server = app.server
 app.layout = html.Div([
         html.H3('test')
-#==============================================================================
-#         html.Div(login_info),
-#         html.Div(creds)
-#==============================================================================
 ])
     
 if __name__ == '__main__':
