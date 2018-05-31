@@ -81,14 +81,16 @@ def time_from_percentile(p, timeseries):
 #     return df
 # 
 #==============================================================================
-app = dash.Dash()
+app = dash.Dash(__name__)
+server = app.server
+
 app.layout = html.Div([
         html.H3('test')
 ])
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-    server = app.server
+
 #==============================================================================
 # # Authorize google sheets and load live tickets into dataframe
 # client = auth_gdrive()
