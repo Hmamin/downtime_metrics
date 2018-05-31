@@ -89,8 +89,11 @@ txt_auth = get_auth()
 app = dash.Dash('auth')
 auth = dash_auth.BasicAuth(app, txt_auth)
 server = app.server
+
+# App layout
 app.layout = html.Div([
-        html.H3('test')
+        html.H3('test'),
+        html.H5(txt_auth[1])
 ])
     
 if __name__ == '__main__':
