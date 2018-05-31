@@ -31,7 +31,7 @@ def auth_gdrive():
     return client
 
 
-def get_auth(file):
+def get_auth():
     '''Read username and password in from environment variables set in
     Heroku.
     '''
@@ -81,13 +81,15 @@ def time_from_percentile(p, timeseries):
 #     return df
 # 
 #==============================================================================
+login_info = get_auth()
+
 app = dash.Dash(__name__)
 server = app.server
-
 app.layout = html.Div([
-        html.H3('test')
+        html.H3('test'),
+        html.Div(login_info)
 ])
-
+    
 if __name__ == '__main__':
     app.run_server(debug=True)
 
